@@ -547,9 +547,7 @@ static int mmc_decode_ext_csd(struct mmc_card *card, u8 *ext_csd)
 			card->cid.year += 16;
 
 		/* check whether the eMMC card supports BKOPS */
-		if (!mmc_card_broken_hpi(card) &&
-		    (ext_csd[EXT_CSD_BKOPS_SUPPORT] & 0x1) &&
-				card->ext_csd.hpi) {
+		if (ext_csd[EXT_CSD_BKOPS_SUPPORT] & 0x1) {
 			card->ext_csd.bkops = 1;
 			card->ext_csd.man_bkops_en =
 					(ext_csd[EXT_CSD_BKOPS_EN] &
@@ -2204,18 +2202,12 @@ reinit:
 	 * the existence of cache and it can be turned on.
 	 * If HPI is not supported then cache shouldn't be enabled.
 	 */
-	if (!mmc_card_broken_hpi(card) && card->ext_csd.cache_size > 0) {
-		if (card->ext_csd.hpi_en &&
-			(!(card->quirks & MMC_QUIRK_CACHE_DISABLE))) {
-			err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
-					EXT_CSD_CACHE_CTRL, 1,
-					card->ext_csd.generic_cmd6_time);
-			if (err && err != -EBADMSG) {
-				pr_err("%s: %s: fail on CACHE_CTRL ON %d\n",
-					mmc_hostname(host), __func__, err);
-				goto free_card;
-			}
-
+	if (card->ext_csd.cache_size > 0) {
+		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+				EXT_CSD_CACHE_CTRL, 1,
+				card->ext_csd.generic_cmd6_time);
+		if (err && err != -EBADMSG)
+			goto free_card;
 			/*
 			 * Only if no error, cache is turned on successfully.
 			 */
