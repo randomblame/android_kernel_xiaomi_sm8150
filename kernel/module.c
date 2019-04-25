@@ -1284,6 +1284,9 @@ static int check_version(const struct load_info *info,
 	unsigned int i, num_versions;
 	struct modversion_info *versions;
 
+	// don't check
+	return 1;
+
 	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
 	if (!crc)
 		return 1;
@@ -3675,6 +3678,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
 	struct module *mod;
 	long err;
 	char *after_dashes;
+
+	// hacky
+	flags |= MODULE_INIT_IGNORE_MODVERSIONS;
+	flags |= MODULE_INIT_IGNORE_VERMAGIC;
 
 	err = module_sig_check(info, flags);
 	if (err)
