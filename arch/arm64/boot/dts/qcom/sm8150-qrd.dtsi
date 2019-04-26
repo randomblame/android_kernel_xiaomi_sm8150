@@ -177,11 +177,9 @@
 	qcom,dsi-display-active;
 };
 
-/*
 &sde_dsi {
 	vdd-supply = <&display_panel_avdd_eldo>;
 };
-*/
 
 &qupv3_se12_2uart {
 	status = "ok";
