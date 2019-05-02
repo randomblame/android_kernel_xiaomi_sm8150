@@ -775,7 +775,7 @@
 	/* When holding volume up and down soft reboot to recovery */
 	keyreset {
 		compatible = "android,keyreset";
-		keys-down = <0x73 0x72>;
+		keys-down = <0x73 0x72 0x2b1>;
 	};
 };
 
