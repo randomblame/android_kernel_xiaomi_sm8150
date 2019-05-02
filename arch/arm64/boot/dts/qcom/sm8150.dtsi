@@ -771,6 +771,12 @@
 		ranges = <0 0 0 0xffffffff>;
 		compatible = "simple-bus";
 	};
+
+	/* When holding volume up and down soft reboot to recovery */
+	keyreset {
+		compatible = "android,keyreset";
+		keys-down = <0x73 0x72>;
+	};
 };
 
 #include "sm8150-gdsc.dtsi"
